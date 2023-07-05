@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Product;
+namespace App\Http\Controllers\Category;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CadastroCategoriaRequest;
@@ -83,12 +83,16 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
 
-        if(Product::where('category_id', $category->id)->exists()) {
+        try {
+            if (Product::where('category_id', $category->id)->exists()) {
+                return redirect()->back()->with('erro', 'Desculpe, não é possível excluir esta categoria no momento. Existem produtos associados a ela!');
+            }
+
+            $category->delete();
+
+            return redirect()->back()->with('sucesso', 'Categoria deletada com sucesso!');
+        } catch (\Exception $e) {
             return redirect()->back()->with('erro', 'Desculpe, não é possível excluir esta categoria no momento. Existem produtos associados a ela!');
         }
-
-        $category->delete();
-
-        return redirect()->back()->with('sucesso', 'Categoria deletada com sucesso!');
     }
 }

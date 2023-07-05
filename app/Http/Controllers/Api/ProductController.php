@@ -27,14 +27,4 @@ class ProductController extends Controller
         return  ProductResource::collection($productsArray);
     }
 
-    
-    /**
-     * Display a listing of the resource.
-     */
-    public function show()
-    {
-        $productsArray = $this->product->with(['user', 'category'])->withoutGlobalScopes()->orderByDesc('id')->get();
-
-        return  ProductResource::collection($productsArray);
-    }
 }
